@@ -12,7 +12,5 @@ RUN pip install \
 RUN mkdir -p /root/.flexget \
     && mkdir -p /tmp/torrents
 
-EXPOSE 3539
-
 ENTRYPOINT ["/usr/bin/flexget"]
 CMD ["--loglevel", "info", "daemon", "start"]
