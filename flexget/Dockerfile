@@ -1,22 +1,18 @@
 FROM alpine:latest
 LABEL maintainer "Isaac Asensio <isaac.asensio@gmail.com>"
 
-RUN apk add --update --no-cache \
-	ca-certificates \
+RUN apk add --update \ 
     python3 \
-    && python3 -m ensurepip \
-    && apk add --update --no-cache \
-        --repository "http://dl-cdn.alpinelinux.org/alpine/edge/testing" \
-        --repository "http://dl-cdn.alpinelinux.org/alpine/edge/main" \
-        libtorrent-rasterbar
+    py-pip
 
-RUN pip3 install --no-cache-dir --upgrade pip
-RUN pip3 install --no-cache-dir --upgrade flexget transmissionrpc
-RUN mkdir /root/.flexget
-RUN mkdir /tmp/torrents
+RUN pip install \
+    flexget \
+    transmissionrpc
 
-WORKDIR /opt/flexget
+RUN mkdir -p /root/.flexget \
+    && mkdir -p /tmp/torrents
 
-VOLUME ["/root/.flexget"]
+EXPOSE 3539
 
-ENTRYPOINT ["flexget"]
+ENTRYPOINT ["/usr/bin/flexget"]
+CMD ["--loglevel", "info", "daemon", "start"]
